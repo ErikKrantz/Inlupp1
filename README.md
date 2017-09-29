@@ -3,7 +3,7 @@
 Git lathund
 
 * Klona repot ner till din dator med kommandot (i terminalen alltså)
-* git clone https://github.com/moamarklund/projectPKD
+* git clone https://github.com/ErikKrantz/Inlupp1
 * Det skapas en mapp då på stället du står på som heter projectPKD
 * Koda som vanligt i en texteditor men såklart i filerna från mappen du klonade
 * När du har ändrat något i någon fil så pushar man upp ändringarna till repot med
