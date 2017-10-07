@@ -70,8 +70,8 @@ void add_goods(tree_root_t *tree)
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
   // link_t *next = NULL;                          // I om att listan är tom så är next == NULL
-  // link_t *new_link = calloc(1, sizeof(link_t)); // Den vet nog inte sizeof link_t?            Alternativ 1 (troligtvis fel)
-  // link_t *new_link = link_new(shelf_elem, next) // Här behöver den inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
+  // link_t *new_link = calloc(1, sizeof(link_t)); // lager.c vet nog inte sizeof link_t             Alternativ 1 (troligtvis fel)
+  // link_t *new_link = link_new(shelf_elem, next) // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
   // new_link->elem = shelf_elem;
   // new_link->next = next; 
   
