@@ -69,6 +69,10 @@ void add_goods(tree_root_t *tree)
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
+  // link_t *new_link = calloc(1, sizeof(link_t));
+  // link_t *next = NULL;
+  // new_link->elem = shelf_elem;
+  // new_link->next = next; 
   
   list_prepend(list, shelf_elem);
   
