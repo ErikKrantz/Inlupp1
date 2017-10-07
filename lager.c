@@ -14,7 +14,7 @@ struct shelf_entry
   int amount
 };
 
-typedef struct shelf_entry shelf_entry_t
+typedef struct shelf_entry shelf_entry_t;
 
 struct goods
 {
@@ -69,20 +69,20 @@ void add_goods(tree_root_t *tree)
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  // link_t *next = NULL;                          // I om att listan är tom så är next == NULL
-  // link_t *new_link = calloc(1, sizeof(link_t)); // lager.c vet nog inte sizeof link_t             Alternativ 1 (troligtvis fel)
-  // link_t *new_link = link_new(shelf_elem, next) // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
+  // link_t *next = NULL;                           // I om att listan är tom så är next == NULL
+  // link_t *new_link = calloc(1, sizeof(link_t));  // lager.c vet nog inte sizeof link_t             Alternativ 1 (troligtvis fel)
+  // link_t *new_link = link_new(shelf_elem, next); // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
   // new_link->elem = shelf_elem;
   // new_link->next = next; 
   
   printf("Break 2\n");
   
-  list_prepend(list, shelf_elem);                  // sätter in elementet i början av listan
+  list_prepend(list, shelf_elem);                   // sätter in elementet i början av listan
   
   printf("Break 3\n");
     
   char *shelf = ask_question_string("Välj hyllplats\n");
-  shelf_elem->shelf = shelf
+  shelf_elem->shelf = shelf;
   
   printf("Break 4\n");
   
