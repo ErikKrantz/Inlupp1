@@ -74,32 +74,21 @@ void add_goods(tree_root_t *tree)
   // new_link->elem = shelf_elem;
   // new_link->next = next; 
   
+  printf("Break 2\n");
+  
   list_prepend(list, shelf_elem);
   
-  printf("Break 2\n");
+  printf("Break 3\n");
     
   char *shelf = ask_question_string("Välj hyllplats\n");
   shelf_elem->shelf = shelf
- 
-    
-  printf("Break 3\n");
-    
-  /*bool occupied = true;
-  shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
-  char *shelf = "";
-  do
-   {
-     shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
-     occupied = shelf_occupied(shelf, tree);
-   }while(occupied);
   
-  elem->shelf = shelf;
-  */
+  printf("Break 4\n");
   
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
   
-  printf("Break 4\n");
+  printf("Break 5\n");
 
   if(tree_insert(tree, name, item))
     {
@@ -137,6 +126,7 @@ void undo_action()
 void exit_program()
 {
   printf("Du har kallat på exit_program\n");
+  // return;
 }
 
 void menu_choice(char c, char *menu)
