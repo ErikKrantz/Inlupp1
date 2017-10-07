@@ -8,6 +8,14 @@
 #include "list.h"
 #include <time.h>
 
+struct shelf_entry
+{
+  char *shelf
+  int amount
+};
+
+typedef struct shelf_entry shelf_entry_t
+
 struct goods
 {
   char *name;
