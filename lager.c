@@ -169,6 +169,40 @@ void edit_goods(tree_root_t *tree)
   
 }
 
+void display_goods_aux(tree_root_t *tree)
+{
+  char *item_name = ask_question_string("Din vara hittades inte i trädet, var vänlig testa igen\n");
+  if (tree_has_key(tree, item_name) == true)
+  {
+    print_goods(item_name);
+    print_menu();
+    char c = ask_question_char("Vad vill du göra nu?\n");
+    menu_choice(c,tree);
+  }
+  display_goods_aux(tree);
+}
+    
+
+void display_goods(tree_root_t *tree)
+{
+  if (tree == NULL)
+  {
+    printf("Det finns inga varor att hämta\n");
+    print_menu();
+    c = ask_question_char("Var vänlig välj ett av ovanstående alternativ\n");                   
+    menu_choice(c, tree);
+  }
+  char *item_name = ask_question_string("Skriv namnet på varan du vill se\n");
+  if (tree_has_key(tree,item_name))
+  {
+    print_goods(item_name);
+    print_menu();
+    char c = ask_question_char("Vad vill du göra nu?\n");
+    menu_choice(c,tree);
+  }
+  display_goods_aux(tree);
+}
+
 void list_goods(tree_root_t *tree)
 {
   display_goods(tree) // Test för att se om vi kan hitta en vara
@@ -218,39 +252,7 @@ void list_goods(tree_root_t *tree)
   
 }
 
-void display_goods_aux(tree_root_t *tree)
-{
-  char *item_name = ask_question_string("Din vara hittades inte i trädet, var vänlig testa igen\n");
-  if (tree_has_key(tree, item_name) == true)
-  {
-    print_goods(item_name);
-    print_menu();
-    char c = ask_question_char("Vad vill du göra nu?\n");
-    menu_choice(c,tree);
-  }
-  display_goods_aux(tree);
-}
-    
 
-void display_goods(tree_root_t *tree)
-{
-  if (tree == NULL)
-  {
-    printf("Det finns inga varor att hämta\n");
-    print_menu();
-    c = ask_question_char("Var vänlig välj ett av ovanstående alternativ\n");                   
-    menu_choice(c, tree);
-  }
-  char *item_name = ask_question_string("Skriv namnet på varan du vill se\n");
-  if (tree_has_key(tree,item_name))
-  {
-    print_goods(item_name);
-    print_menu();
-    char c = ask_question_char("Vad vill du göra nu?\n");
-    menu_choice(c,tree);
-  }
-  display_goods_aux(tree);
-}
 
 void undo_action()
 {
