@@ -61,7 +61,7 @@ void add_goods()
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  shelf_entry_t *shelf = ask_question_string("Välj hyllplats\n");
+  char *shelf = ask_question_string("Välj hyllplats\n");
   shelf_elem->shelf = shelf
     
   printf("Break 2\n");
