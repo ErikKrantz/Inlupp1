@@ -71,15 +71,15 @@ void add_goods(tree_root_t *tree)
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  link_t *next = NULL;                           // I om att listan är tom så är next == NULL
-  // link_t *new_link = calloc(1, sizeof(link_t));  // lager.c vet nog inte sizeof link_t             Alternativ 1 (troligtvis fel)
-  link_t *new_link = link_new(shelf_elem, next); // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
+  link_t *next = NULL;                                  // I om att listan är tom så är next == NULL
+  // link_t *new_link = calloc(1, sizeof(link_t));      // lager.c vet nog inte sizeof link_t             Alternativ 1 (troligtvis fel)
+  link_t *new_link = link_new(shelf_elem, next);        // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
   new_link->elem = shelf_elem;
   new_link->next = next; 
   
   printf("Break 2\n");
   
-  list_prepend(list, shelf_elem);                   // sätter in elementet i början av listan
+  list_prepend(list, shelf_elem);                       // sätter in elementet i början av listan
   
   printf("Break 3\n");
     
@@ -110,26 +110,125 @@ void remove_goods()
 {
 }
 
-void edit_goods()
+void edit_menu(char c, goods_t *item)
 {
+  if (toupper(c)=='N')
+    {
+      char *new_name = ask_question_string("Välj nytt namn för vara\n");
+      item->name = new_name;
+    }
+  if(toupper(c)=='B')
+    {
+      char *new_desc = ask_question_string("Välj ny beskrivning för vara\n");
+      item->desc = new_desc;
+    }
+  if(toupper(c)=='P')
+    {
+      int new_price = ask_question_int("Sätt nytt pris för vara\n");
+      item->price = new_price;
+    }
+  if(toupper(c)=='H')
+  {
+    // TODO
+  }
+  if(toupper(c)=='A')
+  {
+    // TODO
+  }
+  if(toupper(c)=='T')
+  {
+    print_menu();
+    char c = ask_question_char("Vad vill du göra nu?\n");
+    menu_choice(c,tree);
+  }
+  else
+    {
+      c = ask_question_char("Fel inmatning, testa igen\n");
+      edit_menu(c, item);
+    }
+}
+
+void edit_goods(tree_root_t *tree)
+{
+  char *item_key = ask_question_string("Vilken vara vill du ändra?\n");
+  goods_t *item = tree_get(tree, item_key);
+  print_goods(item);
+  printf("Ändra [N]amn\n");
+  printf("Ändra [B]eskrivning\n");
+  printf("Ändra [P]ris\n");
+  printf("Ändra [H]yllplats\n");
+  printf("Ändra [A]ntal\n");
+  printf("Hoppa [T]ill Huvudmenyn\n");
+  char c = ask_question_char("");
+  edit_menu(c, item);
+  char a = ask_question_char("Skriv 'Y' om du vill ändra något mer, any key om inte.\n");
+  if (toupper(a)=='Y')
+    {
+      edit_goods(tree);
+    }
+  
 }
 
 void list_goods(tree_root_t *tree)
 {
+  display_goods(tree) // Test för att se om vi kan hitta en vara
+  
+  /*
+  void list_goods_aux(tree_root_t *tree, int index, int tree_siz)
+{
+  //int temp_i = index;
+  //int upperlimit = tree_size(tree) - index;
+
+  char *arr[20];
+  for (int i=0; i<index+20; index++)
+    {
+      if (index==tree_siz+1)
+        {
+          return;
+        }
+
+      arr[i] = (char *) tree_keys(tree)[index];
+      printf("%d. %s\n", index+1, arr[i]);
+    }
+
+  char c = ask_question_char("Vill du lista fler varor? [Y]?\n");
+  if (toupper(c) == 'Y')
+    {
+      list_goods_aux(tree, index, tree_siz);
+    }
+}
+
+void list_goods(tree_root_t *tree)
+{
+  int tree_siz = tree_size(tree);
+  char *arr[20];
+  int i;
+  for(i=0; i<20; i++)
+    {
+      arr[i] = (char *) tree_keys(tree)[i];
+      printf("%d. %s\n", i+1, arr[i]);
+    }
+  char c = ask_question_char("Vill du lista fler varor? [Y]?\n");
+  if (toupper(c) == 'Y')
+    {
+      list_goods_aux(tree, i, tree_siz);
+    }
+}
+*/
   
 }
 
 void display_goods_aux(tree_root_t *tree)
 {
   char *item_name = ask_question_string("Din vara hittades inte i trädet, var vänlig testa igen\n");
-  if (tree_has_key(tree, item_name))
+  if (tree_has_key(tree, item_name) == true)
   {
     print_goods(item_name);
     print_menu();
     char c = ask_question_char("Vad vill du göra nu?\n");
     menu_choice(c,tree);
   }
-   display_goods_aux(tree);
+  display_goods_aux(tree);
 }
     
 
@@ -177,7 +276,7 @@ void menu_choice(char c, tree_root_t *tree)
 
   if (toupper(c)=='R')
     {
-      edit_goods();
+      edit_goods(tree);
     }
 
   if (toupper(c)=='G')
