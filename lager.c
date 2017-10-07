@@ -32,10 +32,7 @@ char *get_name(goods_t *item)
 }
 
 void print_goods(goods_t *goods)
-{
-  
-  
-  /*
+{ 
   printf("Name:  %s\n", goods->name);
   printf("Desc:  %s\n", goods->desc);
   int priceore = goods->price % 100;
@@ -44,15 +41,7 @@ void print_goods(goods_t *goods)
   int amount = tally_amount(goods->list);
   printf("Amount: %d\n", amount);
   // print shelves too....
-  */
 }
-
-
-/*
-test för list_new/list_append som ej är klart.
-item_instances_t item = {};
-print_goods(list_append(list_new(), item)); 
- */
 
 void print_menu()
 {
@@ -125,14 +114,43 @@ void edit_goods()
 {
 }
 
-void list_goods()
+void list_goods(tree_root_t *tree)
 {
+  
 }
 
-// Vad är poängen?? Gör väl samma som print_goods Vad för argument?
-void display_goods(goods_t *goods)
+void display_goods_aux(tree_root_t *tree)
 {
+  char *item_name = ask_question_string("Din vara hittades inte i trädet, var vänlig testa igen\n");
+  if (tree_has_key(tree, item_name))
+  {
+    print_goods(item_name);
+    print_menu();
+    char c = ask_question_char("Vad vill du göra nu?\n");
+    menu_choice(c,tree);
+  }
+   display_goods_aux(tree);
+}
+    
 
+void display_goods(tree_root_t *tree)
+{
+  if (tree == NULL)
+  {
+    printf("Det finns inga varor att hämta\n");
+    print_menu();
+    c = ask_question_char("Var vänlig välj ett av ovanstående alternativ\n");                   
+    menu_choice(c, tree);
+  }
+  char *item_name = ask_question_string("Skriv namnet på varan du vill se\n");
+  if (tree_has_key(tree,item_name))
+  {
+    print_goods(item_name);
+    print_menu();
+    char c = ask_question_char("Vad vill du göra nu?\n");
+    menu_choice(c,tree);
+  }
+  display_goods_aux(tree);
 }
 
 void undo_action()
@@ -174,7 +192,6 @@ void menu_choice(char c, tree_root_t *tree)
 
   if (toupper(c)=='A')
     {
-      printf("Du har kommit till if-satsen i menu_choice\n");
       exit_program();
     }
   else
