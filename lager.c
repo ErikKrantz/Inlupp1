@@ -33,6 +33,9 @@ char *get_name(goods_t *item)
 
 void print_goods(goods_t *goods)
 {
+  
+  
+  /*
   printf("Name:  %s\n", goods->name);
   printf("Desc:  %s\n", goods->desc);
   int priceore = goods->price % 100;
@@ -41,6 +44,7 @@ void print_goods(goods_t *goods)
   int amount = tally_amount(goods->list);
   printf("Amount: %d\n", amount);
   // print shelves too....
+  */
 }
 
 
@@ -50,6 +54,15 @@ item_instances_t item = {};
 print_goods(list_append(list_new(), item)); 
  */
 
+void print_menu()
+{
+  puts("[L]ägga till en vara");
+  puts("[T]a bort en vara");
+  puts("[R]edigera en vara");
+  puts("Ån[g]ra senaste ändringen");
+  puts("Ändra [h]ela varukatalogen");
+  puts("[A]vsluta");
+}
 
 void add_goods(tree_root_t *tree)
 {
@@ -69,11 +82,11 @@ void add_goods(tree_root_t *tree)
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  // link_t *next = NULL;                           // I om att listan är tom så är next == NULL
+  link_t *next = NULL;                           // I om att listan är tom så är next == NULL
   // link_t *new_link = calloc(1, sizeof(link_t));  // lager.c vet nog inte sizeof link_t             Alternativ 1 (troligtvis fel)
-  // link_t *new_link = link_new(shelf_elem, next); // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
-  // new_link->elem = shelf_elem;
-  // new_link->next = next; 
+  link_t *new_link = link_new(shelf_elem, next); // Här behöver lager.c inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
+  new_link->elem = shelf_elem;
+  new_link->next = next; 
   
   printf("Break 2\n");
   
@@ -99,7 +112,9 @@ void add_goods(tree_root_t *tree)
     {
       printf("Något gick fel, lägg till din vara igen.\n");
     }
-}
+  print_menu();
+  char c = ask_question_char("Din vara är tillagd, vad vill du göra nu?\n");
+  menu_choice(c,tree);
 }
 
 void remove_goods()
@@ -130,12 +145,11 @@ void exit_program()
   // return;
 }
 
-void menu_choice(char c, char *menu)
-{
+void menu_choice(char c, tree_root_t *tree)
+{ 
   if (toupper(c)=='L')
     {
-      tree_root_t emptytree = NULL;
-      add_goods(emptytree);
+      add_goods(tree);
     }
 
   if (toupper(c)=='T')
@@ -165,8 +179,9 @@ void menu_choice(char c, char *menu)
     }
   else
     {
-      c = ask_question_char(menu);                    // printar frågan en gång för mkt
-      menu_choice(c, menu);
+      print_menu();
+      c = ask_question_char("Var vänlig välj ett av ovanstående alternativ\n");                   
+      menu_choice(c, tree);
     }
 }
 
@@ -179,48 +194,10 @@ int main()
   puts("Ån[g]ra senaste ändringen");
   puts("Ändra [h]ela varukatalogen");
   puts("[A]vsluta");
-
-  shelf_entry_t shelf1;
-  shelf1->shelf="A25";
-  shelf1->amount=2;
-
-  shelf_entry shelf2;
-  shelf2->shelf="B25";
-  shelf2->amount=3;
-
-  link_t *link2 = link_new(shelf2, NULL);
-  link_t *link1 = link_new(shelf1, link2);
-
-  list_t list;
-  list->first = link1;
-  list->last = link2;
-
-  goods_t *item;
-  item->name="Tvål";
-  item->desc="Rengör";
-  item->price=2990;
-  item->list=list;
-
-  print_goods(item);
+  
+  tree_root_t *new_tree = NULL;
+  char c = ask_question_char("Vad vill du göra idag?\n");
+  menu_choice(c, new_tree);
+    
   return 0;
 }
-
-
-/*
-  char *firststring = "ABC";
-  char *secondstring = "ABCD";
-  if (lexi_comp(firststring, secondstring))
-    {
-      printf("True\n");
-    }
-  else
-    {
-      printf("False\n");
-    }
-*/
-
-/*
-  char *menu = "Vad vill du göra?\n";
-  char menu_c = ask_question_char(menu);
-  menu_choice(menu_c, menu);
-*/
