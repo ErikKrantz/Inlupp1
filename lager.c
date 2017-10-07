@@ -69,14 +69,15 @@ void add_goods(tree_root_t *tree)
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  // link_t *new_link = calloc(1, sizeof(link_t));
-  // link_t *next = NULL;
+  // link_t *next = NULL;                          // I om att listan är tom så är next == NULL
+  // link_t *new_link = calloc(1, sizeof(link_t)); // Den vet nog inte sizeof link_t?            Alternativ 1 (troligtvis fel)
+  // link_t *new_link = link_new(shelf_elem, next) // Här behöver den inte veta sizeof link_t    Alternativ 2 (troligtvis rätt)
   // new_link->elem = shelf_elem;
   // new_link->next = next; 
   
   printf("Break 2\n");
   
-  list_prepend(list, shelf_elem);
+  list_prepend(list, shelf_elem);                  // sätter in elementet i början av listan
   
   printf("Break 3\n");
     
