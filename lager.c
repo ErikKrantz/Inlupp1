@@ -43,7 +43,7 @@ print_goods(list_append(list_new(), item));
  */
 
 
-void add_goods()
+void add_goods(tree_root_t *tree)
 {
   goods_t *item = calloc(1, sizeof(goods_t));
   char *name = ask_question_string("Välj namn för vara\n");
@@ -61,19 +61,25 @@ void add_goods()
   printf("Break 1\n");
   
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  char *shelf = ask_question_string("Välj hyllplats\n");
-  shelf_elem->shelf = shelf
-    
+  
+  list_prepend(list, shelf_elem);
+  
   printf("Break 2\n");
     
-  bool occupied = true;
-  /* shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
-   char *shelf = "";
-   do
-    {
-      shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
-      occupied = shelf_occupied(shelf, tree);
-    }while(occupied);
+  char *shelf = ask_question_string("Välj hyllplats\n");
+  shelf_elem->shelf = shelf
+ 
+    
+  printf("Break 3\n");
+    
+  /*bool occupied = true;
+  shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
+  char *shelf = "";
+  do
+   {
+     shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
+     occupied = shelf_occupied(shelf, tree);
+   }while(occupied);
   
   elem->shelf = shelf;
   */
@@ -81,7 +87,7 @@ void add_goods()
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
   
-  printf("Break 3\n");
+  printf("Break 4\n");
 
   if(tree_insert(tree, name, item))
     {
