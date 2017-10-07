@@ -45,7 +45,53 @@ print_goods(list_append(list_new(), item));
 
 void add_goods()
 {
- 
+  goods_t *item = calloc(1, sizeof(goods_t));
+  char *name = ask_question_string("Välj namn för vara\n");
+  item->name = name;
+
+  char *desc = ask_question_string("Välj beskrivning för din vara\n");
+  item->desc = desc;
+
+  int price = ask_question_int("Sätt ett pris\n");
+  item->price = price;
+  
+  list_t *list = list_new();
+  item->list = list;
+  
+  printf("Break 1\n");
+  
+  shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
+  shelf_entry_t *shelf = ask_question_string("Välj hyllplats\n");
+  shelf_elem->shelf = shelf
+    
+  printf("Break 2\n");
+    
+  bool occupied = true;
+  /* shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
+   char *shelf = "";
+   do
+    {
+      shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
+      occupied = shelf_occupied(shelf, tree);
+    }while(occupied);
+  
+  elem->shelf = shelf;
+  */
+  
+  int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
+  shelf_elem->amount = amount;
+  
+  printf("Break 3\n");
+
+  if(tree_insert(tree, name, item))
+    {
+    printf("Det lyckades!\n");
+    }
+  else
+    {
+      printf("Något gick fel, lägg till din vara igen.\n");
+    }
+}
 }
 
 void remove_goods()
@@ -79,7 +125,8 @@ void menu_choice(char c, char *menu)
 {
   if (toupper(c)=='L')
     {
-      add_goods();
+      tree_root_t emptytree = NULL;
+      add_goods(emptytree);
     }
 
   if (toupper(c)=='T')
