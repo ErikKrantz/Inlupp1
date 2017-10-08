@@ -288,7 +288,7 @@ void menu_choice(char c, tree_root_t *tree)
 
   if (toupper(c)=='H')
     {
-      list_goods();
+      list_goods(tree);
     }
 
   if (toupper(c)=='A')
