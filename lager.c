@@ -38,7 +38,7 @@ void print_goods(goods_t *goods)
   int priceore = goods->price % 100;
   int pricekr = goods->price/100;
   printf("Price: %d.%d SEK\n", pricekr, priceore);
-  int amount = tally_amount(goods->list);
+  int amount = tally_amount(goods->list);                 // Bör kanske ändras?
   printf("Amount: %d\n", amount);
   // print shelves too....
 }
@@ -49,7 +49,7 @@ void print_menu()
   puts("[T]a bort en vara");
   puts("[R]edigera en vara");
   puts("Ån[g]ra senaste ändringen");
-  puts("Ändra [h]ela varukatalogen");
+  puts("Visa [h]ela varukatalogen");
   puts("[A]vsluta");
 }
 
@@ -130,11 +130,21 @@ void edit_menu(char c, goods_t *item)
     }
   if(toupper(c)=='H')
   {
-    // TODO
+    /* TO DO
+    char *new_shelf = ask_question_string("Välj ny hyllplats\n");
+    current_list = item->list;
+    first_elem = list_first(current_list);
+    first_elem->shelf = new_shelf
+    */
   }
   if(toupper(c)=='A')
   {
-    // TODO
+    /* TO DO
+    int new_amount = ask_question_int("Välj nytt antal\n");
+    current_list = item->list;
+    first_elem = list_first(current_list);
+    first_elem->amount = new_amount;
+    */
   }
   if(toupper(c)=='T')
   {
@@ -311,7 +321,7 @@ int main()
   puts("[T]a bort en vara");
   puts("[R]edigera en vara");
   puts("Ån[g]ra senaste ändringen");
-  puts("Ändra [h]ela varukatalogen");
+  puts("Visa [h]ela varukatalogen");
   puts("[A]vsluta");
   
   tree_root_t *new_tree = NULL;
