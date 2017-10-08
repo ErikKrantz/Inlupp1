@@ -225,6 +225,11 @@ void display_goods(tree_root_t *tree)
 
 void list_goods(tree_root_t *tree)
 {
+  if (tree==NULL)
+  {
+    printf("Det finns inga varor i trädet\n");
+    ask_mainmenu();
+  }
   display_goods(tree) // Test för att se om vi kan hitta en vara
   
   /*
