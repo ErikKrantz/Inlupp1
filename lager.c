@@ -43,8 +43,8 @@ void print_goods(goods_t *goods)
   shelf_entry_t *shelf_elem = list_first(item->list)
   int amount = shelf_elem->amount
   char *shelf = shelf_elem->shelf
-  printf("Amount = %d \n", amount);
-  printf("Shelf = %s \n", shelf);
+  printf("Amount: %d \n", amount);
+  printf("Shelf: %s \n", shelf);
   */
 }
 
