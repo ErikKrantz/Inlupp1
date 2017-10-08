@@ -100,6 +100,7 @@ void add_goods(tree_root_t *tree)
   else
     {
       printf("Något gick fel, lägg till din vara igen.\n");
+      add_goods(tree);
     }
   print_menu();
   char c = ask_question_char("Din vara är tillagd, vad vill du göra nu?\n");
