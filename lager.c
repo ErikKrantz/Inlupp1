@@ -52,6 +52,13 @@ void print_menu()
   puts("[A]vsluta");
 }
 
+void ask_mainmenu()                                      // Återanvänds ofta, så kan vara bekvämt att ha.
+{
+  print_menu();
+  char c = ask_question_char("Vad vill du göra nu?\n");
+  menu_choice(c,tree);
+}
+
 void add_goods(tree_root_t *tree)
 {
   goods_t *item = calloc(1, sizeof(goods_t));
