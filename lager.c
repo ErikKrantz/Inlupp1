@@ -177,7 +177,9 @@ void edit_goods(tree_root_t *tree)
     {
       edit_goods(tree);
     }
-  
+  print_menu();
+  char c = ask_question_char("Vad vill du göra nu?\n");
+  menu_choice(c,tree);
 }
 
 void display_goods_aux(tree_root_t *tree)
