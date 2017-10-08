@@ -39,7 +39,13 @@ void print_goods(goods_t *goods)
   int pricekr = goods->price/100;
   printf("Price: %d.%d SEK\n", pricekr, priceore);
   int amount = tally_amount(goods->list);                 // Bör ändras, då amount alltid ska vara tilldelad - i.e vi ska inte behöva räkna ut vad det är
-  // print shelves too....
+  /* Osäker på om detta stämmer
+  shelf_entry_t *shelf_elem = list_first(item->list)
+  int amount = shelf_elem->amount
+  char *shelf = shelf_elem->shelf
+  printf("Amount = %d \n", amount);
+  printf("Shelf = %s \n", shelf);
+  */
 }
 
 void print_menu()
