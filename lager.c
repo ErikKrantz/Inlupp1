@@ -137,7 +137,7 @@ void edit_menu(char c, goods_t *item)
     }
   if(toupper(c)=='H')
   {
-    /* TO DO
+    /* TO DO - edit: otestad
     char *new_shelf = ask_question_string("Välj ny hyllplats\n");
     current_list = item->list;
     first_elem = list_first(current_list);
@@ -146,7 +146,7 @@ void edit_menu(char c, goods_t *item)
   }
   if(toupper(c)=='A')
   {
-    /* TO DO
+    /* TO DO - edit: otestad
     int new_amount = ask_question_int("Välj nytt antal\n");
     current_list = item->list;
     first_elem = list_first(current_list);
