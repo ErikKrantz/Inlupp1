@@ -317,13 +317,7 @@ void menu_choice(char c, tree_root_t *tree)
 
 int main()
 {
-  puts("[L]ägga till en vara");
-  puts("[T]a bort en vara");
-  puts("[R]edigera en vara");
-  puts("Ån[g]ra senaste ändringen");
-  puts("Visa [h]ela varukatalogen");
-  puts("[A]vsluta");
-  
+  print_menu();
   tree_root_t *new_tree = NULL;
   char c = ask_question_char("Vad vill du göra idag?\n");
   menu_choice(c, new_tree);
