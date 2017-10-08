@@ -38,8 +38,7 @@ void print_goods(goods_t *goods)
   int priceore = goods->price % 100;
   int pricekr = goods->price/100;
   printf("Price: %d.%d SEK\n", pricekr, priceore);
-  int amount = tally_amount(goods->list);                 // Bör kanske ändras?
-  printf("Amount: %d\n", amount);
+  int amount = tally_amount(goods->list);                 // Bör ändras, då amount alltid ska vara tilldelad - i.e vi ska inte behöva räkna ut vad det är
   // print shelves too....
 }
 
