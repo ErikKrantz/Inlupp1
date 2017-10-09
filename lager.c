@@ -325,13 +325,15 @@ void menu_choice(char c, tree_root_t *tree) //menu??
 
 int main()
 {
+  /*
   puts("[L]ägga till en vara");
   puts("[T]a bort en vara");
   puts("[R]edigera en vara");
   puts("Ån[g]ra senaste ändringen");
   puts("Ändra [h]ela varukatalogen");
   puts("[A]vsluta");
-  
+  */
+
   tree_root_t *tree = tree_new();
   char c = getchar();
   menu_choice(c, tree);
