@@ -182,27 +182,26 @@ void remove_goods()
 {
 }
 
-void list_menu(char c, goods_t *item)
+void list_menu(char *c, goods_t *item)
 {
-  if (c=='N')
+  if (strcmp(c,"N")==0 || strcmp(c,"n")==0)
     {
       char *new_name = ask_question_string("Välj nytt namn för vara\n");
       item->name = new_name;
     }
-  if(c=='B')
+  if(strcmp(c,"B")==0 || strcmp(c,"b")==0)
     {
       char *new_desc = ask_question_string("Välj ny beskrivning för vara\n");
       item->desc = new_desc;
     }
-  if(c=='P')
+  if(strcmp(c,"P")==0 || strcmp(c,"p")==0)
     {
       int new_price = ask_question_int("Sätt nytt pris för vara\n");
       item->price = new_price;
     }
-  
-  if(c!='P' || c!='B' || c!='N')
+  else
     {
-      c = ask_question_char("Fel inmatning, testa igen\n");
+      c = ask_question_string("Fel inmatning, testa igen\n");
       list_menu(c, item);
     }
 }
@@ -216,10 +215,10 @@ void edit_goods(tree_root_t *tree)
   printf("Ändra [N]amn\n");
   printf("Ändra [B]eskrivning\n");
   printf("Ändra [P]ris\n");
-  char c = ask_question_char("");
-  list_menu(toupper(c), item);
-  char a = ask_question_char("Skriv 'Y' om du vill ändra något mer, any key om inte.\n");
-  if (toupper(a)=='Y')
+  char *c = ask_question_string("");
+  list_menu(c, item);
+  char *a = ask_question_string("Skriv 'Y' om du vill ändra något mer, any key om inte.\n");
+  if (strcmp(a,"Y")==0 || strcmp(a,"y")==0)
     {
       edit_goods(tree);
     }
@@ -241,8 +240,8 @@ void list_goods_aux(tree_root_t *tree, int index, int tree_siz)
       printf("%d. %s\n", index+1, arr[i]);
     }
   
-  char c = ask_question_char("Vill du lista fler varor? [Y]?\n");
-  if (toupper(c) == 'Y')
+  char *c = ask_question_string("Vill du lista fler varor? [Y]?\n");
+  if (strcmp(c,"Y")==0 || strcmp(c,"y")==0)
     {
       list_goods_aux(tree, index, tree_siz);
     }
@@ -263,8 +262,8 @@ void list_goods(tree_root_t *tree)
           break;
         }
     }
-  char c = ask_question_char("Vill du lista fler varor? [Y]?\n");
-  if (toupper(c) == 'Y')
+  char *c = ask_question_string("Vill du lista fler varor? [Y]?\n");
+  if (strcmp(c,"Y")==0 || strcmp(c,"y")==0)
     {
       list_goods_aux(tree, i, tree_siz);
     }
@@ -281,65 +280,62 @@ void undo_action()
 {
 }
 
-void menu_choice(char c, tree_root_t *tree) //menu??
+void menu_choice(char *c, tree_root_t *tree) //menu??
 {
-  if (toupper(c)=='L')
+  if (strcmp(c,"L")==0 || strcmp(c,"l")==0)
     {
       add_goods(tree);
     }
 
-  if (toupper(c)=='T')
+  if (strcmp(c,"T")==0 || strcmp(c,"t")==0)
     {
       remove_goods();
     }
 
-  if (toupper(c)=='R')
+  if (strcmp(c,"R")==0 || strcmp(c,"r")==0)
     {
       //edit_goods();
     }
 
-  if (toupper(c)=='G')
+  if (strcmp(c,"G")==0 || strcmp(c,"g")==0)
     {
       undo_action();
     }
 
-  if (toupper(c)=='H')
+  if (strcmp(c,"H")==0 || strcmp(c,"h")==0)
     {
       list_goods(tree);
     }
 
-  if (toupper(c)=='A')
+  if (strcmp(c,"A")==0 || strcmp(c,"a")==0)
     {
       puts("Du har valt att stänga av programmet");
       exit(0);
-    }
-  /*            
+    }           
   else
     {
-      c = ask_question_char(menu);            // printar frågan en gång för mkt
-      menu_choice(c, menu);
+      c = ask_question_string("Ditt val hittades inte i menyn, testa igen.\n");            // printar frågan en gång för mkt
+      menu_choice(c, tree);
     }
-  */
 }
 
 
 int main()
 {
-  /*
   puts("[L]ägga till en vara");
   puts("[T]a bort en vara");
   puts("[R]edigera en vara");
   puts("Ån[g]ra senaste ändringen");
   puts("Ändra [h]ela varukatalogen");
   puts("[A]vsluta");
-  */
+  
 
   tree_root_t *tree = tree_new();
-  char c = getchar();
-  menu_choice(c, tree);
+  char *ch = ask_question_string("Vad vill du göra idag?\n");
+  menu_choice(ch, tree);
   list_goods(tree);
-  //print_goods(tree_get(tree, "tvål"));  // verkar funka som den ska.
-  //display_goods(tree);
+  print_goods(tree_get(tree, "tvål"));  // verkar funka som den ska.
+  display_goods(tree);
   edit_goods(tree);
   
   /*
