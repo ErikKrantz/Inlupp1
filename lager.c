@@ -285,26 +285,31 @@ void menu_choice(char *c, tree_root_t *tree) //menu??
   if (strcmp(c,"L")==0 || strcmp(c,"l")==0)
     {
       add_goods(tree);
+      return;
     }
 
   if (strcmp(c,"T")==0 || strcmp(c,"t")==0)
     {
       remove_goods();
+      return;
     }
 
   if (strcmp(c,"R")==0 || strcmp(c,"r")==0)
     {
       //edit_goods();
+      //return;
     }
 
   if (strcmp(c,"G")==0 || strcmp(c,"g")==0)
     {
       undo_action();
+      return;
     }
 
   if (strcmp(c,"H")==0 || strcmp(c,"h")==0)
     {
       list_goods(tree);
+      return;
     }
 
   if (strcmp(c,"A")==0 || strcmp(c,"a")==0)
