@@ -43,9 +43,9 @@ T *get_value_root(tree_root_t *tree);
 
 T *get_value_node(tree_node_t *tree);
 
-char *get_key_root(tree_root_t *tree);
+K *get_key_node(tree_node_t *tree, K key);
 
-char *get_key_node(tree_node_t *tree);
+K *get_key_root(tree_root_t *tree, K key);
 
 
 bool lexi_comp(char *first, char *second);

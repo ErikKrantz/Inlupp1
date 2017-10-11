@@ -50,15 +50,7 @@ T *get_value_node(tree_node_t *tree)
   return tree->value;
 }
 
-char *get_key_root(tree_root_t *tree)
-{
-  return tree->root->key;
-}
 
-char *get_key_node(tree_node_t *tree)
-{
-  return tree->key;
-}
 
 
 /// Creates a new tree
@@ -204,6 +196,35 @@ bool tree_has_key(tree_root_t *tree, K key) // UNTESTED
     {
       return tree_has_key_node(tree->root->left, key) || tree_has_key_node(tree->root->right, key);
     }
+}
+
+
+
+
+
+K *get_key_node(tree_node_t *tree, K key)
+{
+  if (tree->key == key)
+    {
+      return &(tree->key);
+    }
+  else
+    {
+      if (tree_has_key_node(tree->left, key))
+        {
+          return get_key_node(tree->left, key);
+        }
+      if (tree_has_key_node(tree->right, key))
+        {
+          return get_key_node(tree->right, key);          
+        }
+    }  
+}
+
+
+K *get_key_root(tree_root_t *tree, K key)
+{
+  return get_key_node(tree->root, key);
 }
 
 

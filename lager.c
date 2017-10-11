@@ -69,6 +69,7 @@ void print_goods(goods_t *item)
       int amount = tally_amount(item->list);
       printf("Amount: %d\n", amount);
       get_shelf(item);
+      puts("---------------------------");
     }
 }
 
@@ -182,53 +183,8 @@ void remove_goods()
 {
 }
 
-void list_menu(char *c, goods_t *item)
-{
-  if (strcmp(c,"N")==0 || strcmp(c,"n")==0)
-    {
-      char *new_name = ask_question_string("Välj nytt namn för vara\n");
-      item->name = new_name;
-    }
-  if(strcmp(c,"B")==0 || strcmp(c,"b")==0)
-    {
-      char *new_desc = ask_question_string("Välj ny beskrivning för vara\n");
-      item->desc = new_desc;
-    }
-  if(strcmp(c,"P")==0 || strcmp(c,"p")==0)
-    {
-      int new_price = ask_question_int("Sätt nytt pris för vara\n");
-      item->price = new_price;
-    }
-  else
-    {
-      c = ask_question_string("Fel inmatning, testa igen\n");
-      list_menu(c, item);
-    }
-}
-
-void edit_goods(tree_root_t *tree)
-{
-  char *item_key = ask_question_string("Vilken vara vill du ändra?\n");
-  goods_t *item = tree_get(tree, item_key);
-  print_goods(item);
-
-  printf("Ändra [N]amn\n");
-  printf("Ändra [B]eskrivning\n");
-  printf("Ändra [P]ris\n");
-  char *c = ask_question_string("");
-  list_menu(c, item);
-  char *a = ask_question_string("Skriv 'Y' om du vill ändra något mer, any key om inte.\n");
-  if (strcmp(a,"Y")==0 || strcmp(a,"y")==0)
-    {
-      edit_goods(tree);
-    }
-}
-
 void list_goods_aux(tree_root_t *tree, int index, int tree_siz)
 {
-  //int temp_i = index;
-  //int upperlimit = tree_size(tree) - index;
-
   char *arr[20];
   for (int i=0; i<index+20; index++)
     {
@@ -270,6 +226,7 @@ void list_goods(tree_root_t *tree)
 }
 
 
+
 void display_goods(tree_root_t *tree)
 {
   char *item = ask_question_string("Vilken vara vill du visa?\n");
@@ -279,6 +236,74 @@ void display_goods(tree_root_t *tree)
 void undo_action()
 {
 }
+
+
+void list_menu(goods_t *item, tree_root_t *tree) 
+{
+  puts("Ändra [N]amn");
+  puts("Ändra [B]eskrivning");
+  puts("Ändra [P]ris");
+  puts("[L]ista varukatalog");
+  puts("[A]vbryt");
+  puts("---------------------------");
+  
+  char *c = ask_question_string("");
+  char temp = c[0];
+  c[0] = toupper(temp);
+  
+  if (!strcmp(c, "L"))
+    {
+      list_goods(tree);
+      list_menu(item, tree);
+    }
+  
+  if (!strcmp(c,"Q"))
+    {
+      return;
+    }
+  
+  if(!strcmp(c,"N"))
+    {
+      char *new_name = ask_question_string("Välj nytt namn för varan\n");
+      item->name = new_name;
+      *(get_key_root(tree, item->name)) = new_name;
+      print_goods(item);
+      list_menu(item, tree);
+    }
+  
+  if(strcmp(c,"B")==0)
+    {
+      char *new_desc = ask_question_string("Välj ny beskrivning för varan\n");
+      item->desc = new_desc;
+      print_goods(item);
+      list_menu(item, tree);
+    }
+  
+  if(strcmp(c,"P")==0)
+    {
+      int new_price = ask_question_int("Välj nytt pris för varan\n");
+      item->price = new_price;
+      print_goods(item);
+    }
+    
+  puts("Fel inmatning, testa igen");
+  list_menu(item, tree);
+}
+
+void edit_goods(tree_root_t *tree)
+{
+  char *item_key = ask_question_string("Vilken vara vill du ändra?\n");    
+  goods_t *item = tree_get(tree, item_key);
+  while(!item)
+    {
+      item_key = ask_question_string("Hittade ej varan, försök igen\n");
+      item = tree_get(tree, item_key);
+    }
+  print_goods(item);
+
+  list_menu(item, tree);
+}
+
 
 void menu_choice(char *c, tree_root_t *tree) //menu??
 {
@@ -333,13 +358,14 @@ int main()
   puts("Ån[g]ra senaste ändringen");
   puts("Ändra [h]ela varukatalogen");
   puts("[A]vsluta");
-  
+  puts("---------------------------");
 
   tree_root_t *tree = tree_new();
   char *ch = ask_question_string("Vad vill du göra idag?\n");
   menu_choice(ch, tree);
+  
   list_goods(tree);
-  print_goods(tree_get(tree, "tvål"));  // verkar funka som den ska.
+  //print_goods(tree_get(tree, "tvål"));
   display_goods(tree);
   edit_goods(tree);
   
