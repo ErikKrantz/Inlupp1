@@ -26,7 +26,7 @@ struct goods
 void print_menu()
 {
   char *menu_choices = "[L]ägga till en vara\n[T]a bort en vara\n[R]edigera en vara\nÅn[g]ra senaste ändringen\nLista [h]ela varukatalogen\n[A]vsluta\n";
-  printf("%s", menu_choices);
+  puts(menu_choices);
 }
 
 void get_shelf_aux(link_t *link)
@@ -97,37 +97,44 @@ int tally_amount(list_t *list)
 
 bool shelf_occupied_aux(char *shelf, tree_node_t *tree)
 {
-  if (tree==NULL)
+  if (!get_value_node(tree))
     {
       return false;
     }
 
   char *value = (char *) get_element((link_t *)get_value_node(tree));
-  if (strcmp(shelf, value))
+  if (!strcmp(shelf, value))
     {
       return true;
     }
-  return shelf_occupied_aux(shelf, get_right(tree)) && shelf_occupied_aux(shelf, get_left(tree));  
+
+  if (!get_right(tree))
+    {
+      if (!get_left(tree))
+        {
+          return false;
+        }
+      return shelf_occupied_aux(shelf, get_left(tree));
+    }
+  return shelf_occupied_aux(shelf, get_right(tree));
 }
 
 bool shelf_occupied(char *shelf, tree_root_t *tree)
 {
-  if (tree==NULL)
+  if (!get_value_root(tree))
     {
       return false;
     }
 
   char *value = (char *) get_element((link_t *)get_value_root(tree));
-  if(strcmp(shelf, value))
+  if(!strcmp(shelf, value))
     {
       return true;
     }
   else
     {
-      shelf_occupied_aux(shelf, get_root(tree)); 
-      
+      return shelf_occupied_aux(shelf, get_root(tree)); 
     }
-  return false;
 }
 
 
@@ -146,24 +153,25 @@ void add_goods(tree_root_t *tree)
   list_t *list = list_new();
   item->list = list;
   
-  //bool occupied = true;
-  //shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
+  bool occupied = true;
+  // shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
-  //char *shelf = "";
+  char *shelf;
 
-  list_prepend(list, shelf_elem);
-
-  /*
   do
     {
-      shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");     // Ger seg fault atm, måste göra koll för shelf på något sätt
+      shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
       occupied = shelf_occupied(shelf, tree);
-    }while(occupied);
+    }while(occupied); 
+  
+  list_prepend(list, shelf_elem);
   shelf_elem->shelf = shelf;
-  */
 
+
+  /*
   char *shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
   shelf_elem->shelf = shelf;
+*/
   
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
@@ -244,8 +252,7 @@ void list_menu(goods_t *item, tree_root_t *tree)
   puts("Ändra [B]eskrivning");
   puts("Ändra [P]ris");
   puts("[L]ista varukatalog");
-  puts("[A]vbryt");
-  puts("");
+  puts("[A]vbryt\n");
   
   char *c = ask_question_string("");
   char temp = c[0];
@@ -355,8 +362,8 @@ void menu_choice(tree_root_t *tree)
 int main()
 {
   tree_root_t *tree = tree_new();
-  menu_choice(tree);
-
+  puts("Välkommen till lagerhantering 1.0");
+  puts("=================================");
   while(true)
     {
       menu_choice(tree);

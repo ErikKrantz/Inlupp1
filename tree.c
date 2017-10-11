@@ -173,8 +173,13 @@ int tree_depth(tree_root_t *tree) // UNTESTED
 
 bool tree_has_key_node(tree_node_t *tree, K key)
 {
+  if (!tree->value)
+    {
+      return false;
+    }
+  
   char *name = tree->key;
-  if (strcmp(name, key) == 0)
+  if (!strcmp(name, key))
     {
       return true;
     }
@@ -187,8 +192,13 @@ bool tree_has_key_node(tree_node_t *tree, K key)
 /// \returns: true if key is a key in the tree
 bool tree_has_key(tree_root_t *tree, K key) // UNTESTED
 {
+  if (!tree->root->value)
+    {
+      return false;
+    }
+  
   char *name = tree->root->key;
-  if (strcmp(name, key) == 0)
+  if (!strcmp(name, key))
     {
       return true;
     }
