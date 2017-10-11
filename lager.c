@@ -23,6 +23,12 @@ struct goods
   list_t *list;
 };
 
+void print_menu()
+{
+  char *menu_choices = "[L]ägga till en vara\n[T]a bort en vara\n[R]edigera en vara\nÅn[g]ra senaste ändringen\nLista [h]ela varukatalogen\n[A]vsluta\n";
+  printf("%s", menu_choices);
+}
+
 void get_shelf_aux(link_t *link)
 {
   shelf_entry_t *shelf = (shelf_entry_t *) get_element(link);
@@ -69,10 +75,9 @@ void print_goods(goods_t *item)
       int amount = tally_amount(item->list);
       printf("Amount: %d\n", amount);
       get_shelf(item);
-      puts("---------------------------");
+      puts("\n");
     }
 }
-
 
 int tally_amount(list_t *list)
 {
@@ -89,12 +94,6 @@ int tally_amount(list_t *list)
     }
   return amount;
 }
-
-/*
-test för list_new/list_append som ej är klart.
-item_instances_t item = {};
-print_goods(list_append(list_new(), item)); 
- */
 
 bool shelf_occupied_aux(char *shelf, tree_node_t *tree)
 {
@@ -162,19 +161,20 @@ void add_goods(tree_root_t *tree)
     }while(occupied);
   shelf_elem->shelf = shelf;
   */
+
   char *shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
   shelf_elem->shelf = shelf;
   
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
   
-  if(tree_insert(tree, name, item))       // Ger seg fault
+  if(tree_insert(tree, name, item))       
     {
-    printf("Det lyckades!\n");
+    printf("Det lyckades!\n\n");
     }
   else
     {
-      printf("Något gick fel, lägg till din vara igen.\n");
+      printf("Något gick fel, lägg till din vara igen.\n\n");
     }
 }
 
@@ -245,7 +245,7 @@ void list_menu(goods_t *item, tree_root_t *tree)
   puts("Ändra [P]ris");
   puts("[L]ista varukatalog");
   puts("[A]vbryt");
-  puts("---------------------------");
+  puts("");
   
   char *c = ask_question_string("");
   char temp = c[0];
@@ -257,7 +257,7 @@ void list_menu(goods_t *item, tree_root_t *tree)
       list_menu(item, tree);
     }
   
-  if (!strcmp(c,"Q"))
+  if (!strcmp(c,"A"))
     {
       return;
     }
@@ -265,8 +265,8 @@ void list_menu(goods_t *item, tree_root_t *tree)
   if(!strcmp(c,"N"))
     {
       char *new_name = ask_question_string("Välj nytt namn för varan\n");
-      item->name = new_name;
       *(get_key_root(tree, item->name)) = new_name;
+      item->name = new_name;
       print_goods(item);
       list_menu(item, tree);
     }
@@ -284,6 +284,7 @@ void list_menu(goods_t *item, tree_root_t *tree)
       int new_price = ask_question_int("Välj nytt pris för varan\n");
       item->price = new_price;
       print_goods(item);
+      list_menu(item, tree);
     }
     
   puts("Fel inmatning, testa igen");
@@ -302,11 +303,15 @@ void edit_goods(tree_root_t *tree)
   print_goods(item);
 
   list_menu(item, tree);
+  return;
 }
 
 
-void menu_choice(char *c, tree_root_t *tree) //menu??
+void menu_choice(tree_root_t *tree) 
 {
+  print_menu();
+  char *c = ask_question_string("Vad vill du göra idag?\n");
+  
   if (strcmp(c,"L")==0 || strcmp(c,"l")==0)
     {
       add_goods(tree);
@@ -321,8 +326,8 @@ void menu_choice(char *c, tree_root_t *tree) //menu??
 
   if (strcmp(c,"R")==0 || strcmp(c,"r")==0)
     {
-      //edit_goods();
-      //return;
+      edit_goods(tree);
+      return;
     }
 
   if (strcmp(c,"G")==0 || strcmp(c,"g")==0)
@@ -341,82 +346,21 @@ void menu_choice(char *c, tree_root_t *tree) //menu??
     {
       puts("Du har valt att stänga av programmet");
       exit(0);
-    }           
-  else
-    {
-      c = ask_question_string("Ditt val hittades inte i menyn, testa igen.\n");            // printar frågan en gång för mkt
-      menu_choice(c, tree);
     }
+  
+  return;
 }
 
 
 int main()
 {
-  puts("[L]ägga till en vara");
-  puts("[T]a bort en vara");
-  puts("[R]edigera en vara");
-  puts("Ån[g]ra senaste ändringen");
-  puts("Ändra [h]ela varukatalogen");
-  puts("[A]vsluta");
-  puts("---------------------------");
-
   tree_root_t *tree = tree_new();
-  char *ch = ask_question_string("Vad vill du göra idag?\n");
-  menu_choice(ch, tree);
-  
-  list_goods(tree);
-  //print_goods(tree_get(tree, "tvål"));
-  display_goods(tree);
-  edit_goods(tree);
-  
-  /*
-  shelf_entry_t *shelf1;
-  shelf1->shelf="A25";
-  shelf1->amount=2;
+  menu_choice(tree);
 
-  shelf_entry_t *shelf2;
-  shelf2->shelf="B25";
-  shelf2->amount=3;
-
-  
-  link_t *link2 = link_new(shelf2, NULL);
-  link_t *link1 = link_new(shelf1, link2);
-
-  list_t *list;
-  get_first(list) = link1;
-  //list->first = link1;
-
-  get_last(list) = link2;
-  //list->last = link2;
-  
-  goods_t *item;
-  item->name="Tvål";
-  item->desc="Rengör";
-  item->price=2990;
-  item->list=list;
-
-  print_goods(item);
-  */
+  while(true)
+    {
+      menu_choice(tree);
+    }
   
   return 0;
 }
-
-
-/*
-  char *firststring = "ABC";
-  char *secondstring = "ABCD";
-  if (lexi_comp(firststring, secondstring))
-    {
-      printf("True\n");
-    }
-  else
-    {
-      printf("False\n");
-    }
-*/
-
-/*
-  char *menu = "Vad vill du göra?\n";
-  char menu_c = ask_question_char(menu);
-  menu_choice(menu_c, menu);
-*/

@@ -218,7 +218,8 @@ K *get_key_node(tree_node_t *tree, K key)
         {
           return get_key_node(tree->right, key);          
         }
-    }  
+    }
+  return NULL;
 }
 
 
