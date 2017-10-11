@@ -50,7 +50,15 @@ T *get_value_node(tree_node_t *tree)
   return tree->value;
 }
 
+char *get_key_root(tree_root_t *tree)
+{
+  return tree->root->key;
+}
 
+char *get_key_node(tree_node_t *tree)
+{
+  return tree->key;
+}
 
 
 /// Creates a new tree
