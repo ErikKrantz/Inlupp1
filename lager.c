@@ -101,7 +101,7 @@ bool shelf_occupied_aux(char *input, tree_node_t *tree)
     {
       return false;
     }
-
+  puts("bp6");
   shelf_entry_t *shelf_entry = (shelf_entry_t *) get_element((link_t *)get_value_node(tree));
   char *shelf = shelf_entry->shelf;
   if (!strcmp(input, shelf))
@@ -126,15 +126,21 @@ bool shelf_occupied(char *input, tree_root_t *tree)
     {
       return false;
     }
-
+  puts("bp5");
+  
+  // Seg fault because you can't just get_value_root, it has to be the right element of the right value.
   shelf_entry_t *shelf_entry  = (shelf_entry_t *) get_element((link_t *)get_value_root(tree));
+
   char *shelf = shelf_entry->shelf;
+  
+  // mellan denna kommentar och bp5.5 -> seg fault när man lägger till en andra vara.
   if(!strcmp(input, shelf))
     {
       return true;
     }
   else
     {
+      puts("bp5.5");
       return shelf_occupied_aux(input, get_root(tree)); 
     }
 }
@@ -145,38 +151,36 @@ void add_goods(tree_root_t *tree)
   goods_t *item = calloc(1, sizeof(goods_t));
   char *name = ask_question_string("Välj namn för varan\n");
   item->name = name;
-
+  puts("bp1");
   char *desc = ask_question_string("Välj beskrivning för din vara\n");
   item->desc = desc;
-
+  puts("bp2");
   int price = ask_question_int("Sätt ett pris\n");
   item->price = price;
-  
+  puts("bp3");
   list_t *list = list_new();
   item->list = list;
   
   bool occupied = true;
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
   char *shelf;
-
+  puts("bp4");
   do
     {
       shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
       occupied = shelf_occupied(shelf, tree);
-    }while(occupied); 
+    }while(occupied);
+  // Seg fault i do-while-loopen när man lägger till en andra vara.
   
+  puts("bp4.5");
+  shelf_elem->shelf = shelf;
   list_prepend(list, shelf_elem);
-  shelf_elem->shelf = shelf;
-
-
-  /*
-  char *shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
-  shelf_elem->shelf = shelf;
-*/
   
+  puts("bp5");
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
-  
+
+  puts("bp6");
   if(tree_insert(tree, name, item))       
     {
     printf("Det lyckades!\n\n");
