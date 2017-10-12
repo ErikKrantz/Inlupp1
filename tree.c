@@ -299,10 +299,20 @@ bool tree_insert_node(tree_node_t *tree, K key, T elem)
 	{
 	  if(lexi_comp(key, node_key))
 	    {
+	      if (tree->left == NULL)
+		{
+		  tree_node_t *left = calloc(1,sizeof(tree_node_t));
+		  tree->left = left;
+		}
 	      tree_insert_node(tree->left, key, elem);
 	    }
 	  else
 	    {
+	      if (tree->right == NULL)
+		{
+		  tree_node_t *right = calloc(1,sizeof(tree_node_t));
+		  tree->right = right;
+		}
 	      tree_insert_node(tree->right, key, elem);
 	    }
 	}
