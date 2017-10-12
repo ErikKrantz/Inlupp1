@@ -134,7 +134,7 @@ bool shelf_occupied(char *input, tree_root_t *tree)
   char *shelf = shelf_entry->shelf;
   
   // mellan denna kommentar och bp5.5 -> seg fault när man lägger till en andra vara.
-  if(!strcmp(input, shelf))
+  if(!strcmp(input, shelf)) // det är här man får seg fault, antagligen shelf som är NULL lr nåt sånt.
     {
       return true;
     }
@@ -151,20 +151,28 @@ void add_goods(tree_root_t *tree)
   goods_t *item = calloc(1, sizeof(goods_t));
   char *name = ask_question_string("Välj namn för varan\n");
   item->name = name;
+
   puts("bp1");
+  
   char *desc = ask_question_string("Välj beskrivning för din vara\n");
   item->desc = desc;
+
   puts("bp2");
+
   int price = ask_question_int("Sätt ett pris\n");
   item->price = price;
+
   puts("bp3");
+
   list_t *list = list_new();
   item->list = list;
   
   bool occupied = true;
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
   char *shelf;
+
   puts("bp4");
+
   do
     {
       shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
@@ -173,14 +181,17 @@ void add_goods(tree_root_t *tree)
   // Seg fault i do-while-loopen när man lägger till en andra vara.
   
   puts("bp4.5");
+
   shelf_elem->shelf = shelf;
   list_prepend(list, shelf_elem);
   
   puts("bp5");
+
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
 
   puts("bp6");
+
   if(tree_insert(tree, name, item))       
     {
     printf("Det lyckades!\n\n");
