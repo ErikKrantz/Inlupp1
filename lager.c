@@ -95,15 +95,16 @@ int tally_amount(list_t *list)
   return amount;
 }
 
-bool shelf_occupied_aux(char *shelf, tree_node_t *tree)
+bool shelf_occupied_aux(char *input, tree_node_t *tree)
 {
   if (!get_value_node(tree))
     {
       return false;
     }
 
-  char *value = (char *) get_element((link_t *)get_value_node(tree));
-  if (!strcmp(shelf, value))
+  shelf_entry_t *shelf_entry = (shelf_entry_t *) get_element((link_t *)get_value_node(tree));
+  char *shelf = shelf_entry->shelf;
+  if (!strcmp(input, shelf))
     {
       return true;
     }
@@ -114,26 +115,27 @@ bool shelf_occupied_aux(char *shelf, tree_node_t *tree)
         {
           return false;
         }
-      return shelf_occupied_aux(shelf, get_left(tree));
+      return shelf_occupied_aux(input, get_left(tree));
     }
-  return shelf_occupied_aux(shelf, get_right(tree));
+  return shelf_occupied_aux(input, get_right(tree));
 }
 
-bool shelf_occupied(char *shelf, tree_root_t *tree)
+bool shelf_occupied(char *input, tree_root_t *tree)
 {
   if (!get_value_root(tree))
     {
       return false;
     }
 
-  char *value = (char *) get_element((link_t *)get_value_root(tree));
-  if(!strcmp(shelf, value))
+  shelf_entry_t *shelf_entry  = (shelf_entry_t *) get_element((link_t *)get_value_root(tree));
+  char *shelf = shelf_entry->shelf;
+  if(!strcmp(input, shelf))
     {
       return true;
     }
   else
     {
-      return shelf_occupied_aux(shelf, get_root(tree)); 
+      return shelf_occupied_aux(input, get_root(tree)); 
     }
 }
 
@@ -154,7 +156,6 @@ void add_goods(tree_root_t *tree)
   item->list = list;
   
   bool occupied = true;
-  // shelf_entry_t *elem = (shelf_entry_t *) get_element(get_first(item->list));
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
   char *shelf;
 
