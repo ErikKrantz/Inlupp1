@@ -8,6 +8,7 @@ typedef struct goods goods_t;
 
 typedef struct shelf_entry shelf_entry_t;
 
+typedef struct action action_t;
 
 char *get_name(goods_t *item);
 

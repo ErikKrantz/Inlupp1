@@ -23,6 +23,13 @@ struct goods
   list_t *list;
 };
 
+struct action
+{
+  int type; // NOTHING = 0, ADD = 1, REMOVE = 2, EDIT = 3
+  goods_t *merch;
+  goods_t copy;
+};
+
 void print_menu()
 {
   char *menu_choices = "[L]ägga till en vara\n[T]a bort en vara\n[R]edigera en vara\nÅn[g]ra senaste ändringen\nLista [h]ela varukatalogen\n[A]vsluta\n";
@@ -350,38 +357,40 @@ void menu_choice(tree_root_t *tree)
 {
   print_menu();
   char *c = ask_question_string("Vad vill du göra idag?\n");
+  char temp = c[0];
+  c[0] = toupper(temp);
   
-  if (strcmp(c,"L")==0 || strcmp(c,"l")==0)
+  if (!strcmp(c,"L"))
     {
       add_goods(tree);
       return;
     }
 
-  if (strcmp(c,"T")==0 || strcmp(c,"t")==0)
+  if (!strcmp(c,"T"))
     {
       remove_goods();
       return;
     }
 
-  if (strcmp(c,"R")==0 || strcmp(c,"r")==0)
+  if (!strcmp(c,"R"))
     {
       edit_goods(tree);
       return;
     }
 
-  if (strcmp(c,"G")==0 || strcmp(c,"g")==0)
+  if (!strcmp(c,"G"))
     {
       undo_action();
       return;
     }
 
-  if (strcmp(c,"H")==0 || strcmp(c,"h")==0)
+  if (!strcmp(c,"H"))
     {
       list_goods(tree);
       return;
     }
 
-  if (strcmp(c,"A")==0 || strcmp(c,"a")==0)
+  if (!strcmp(c,"A"))
     {
       puts("Du har valt att stänga av programmet");
       exit(0);
