@@ -102,9 +102,11 @@ bool shelf_occupied_aux(char *input, tree_node_t *tree)
       return false;
     }
   puts("bp6");
-  shelf_entry_t *shelf_entry = (shelf_entry_t *) get_element((link_t *)get_value_node(tree));
+  goods_t *item = (goods_t *) get_value_node(tree);
+  list_t *lista = (item->list);
+  shelf_entry_t *shelf_entry = (shelf_entry_t *) list_first(lista);
   char *shelf = shelf_entry->shelf;
-  if (!strcmp(input, shelf))
+  if(!strcmp(input,shelf))
     {
       return true;
     }
@@ -128,8 +130,9 @@ bool shelf_occupied(char *input, tree_root_t *tree)
     }
   puts("bp5");
   
-  // Seg fault probably cus second insert goes wrong so "shelf" isn't a char that can be used with strcmp.
-  shelf_entry_t *shelf_entry  = (shelf_entry_t *) get_element((link_t *)get_value_root(tree));
+  goods_t *item = (goods_t *) get_value_root(tree);
+  list_t *lista = (item->list);
+  shelf_entry_t *shelf_entry = (shelf_entry_t *) list_first(lista);
 
   char *shelf = shelf_entry->shelf;
   
