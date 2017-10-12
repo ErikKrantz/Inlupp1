@@ -173,17 +173,27 @@ int tree_depth(tree_root_t *tree) // UNTESTED
 
 bool tree_has_key_node(tree_node_t *tree, K key)
 {
-  if (!tree->value)
+  puts("treehaskeynode1");
+  if (tree==NULL)
     {
       return false;
     }
-  
+  if (!tree->value)
+    {
+      puts("treehaskeynode2");
+      return false;
+    }
+  puts("treehaskeynode3");
   char *name = tree->key;
+  puts("treehaskeynode4");
   if (!strcmp(name, key))
     {
+      puts("treehaskeynode5");
       return true;
     }
+  puts("treehaskeynode6");
   return tree_has_key_node(tree->left, key) || tree_has_key_node(tree->right, key);
+  puts("treehaskeynode7");
 }
 /// Checks whether a key is used in a tree
 ///
@@ -196,7 +206,6 @@ bool tree_has_key(tree_root_t *tree, K key) // UNTESTED
     {
       return false;
     }
-  
   char *name = tree->root->key;
   if (!strcmp(name, key))
     {
@@ -274,9 +283,10 @@ bool lexi_comp(char *first, char *second)  //true if first string orders first l
 
 bool tree_insert_node(tree_node_t *tree, K key, T elem)
 {
-  if (tree==NULL)
+  if (tree->value==NULL)
     {
       tree->value = elem;
+      tree->key = key;
     }
   else
     {
@@ -311,24 +321,41 @@ bool tree_insert(tree_root_t *tree, K key, T elem) // UNTESTED
 {
   if (tree->root->value == NULL)                     // if tree is empty
     {
+      puts("treeins1");
       tree->root->key = key;
-      tree->root->value = elem;              // set tree's item to elem 
+      tree->root->value = elem;                      // set tree's item to elem 
+      puts("treeins2");
     }
+  
   else 
     {
+      puts("treeins3");
       char *node_key = tree->root->key;
+      puts("treeins4");
       if (tree_has_key(tree,key))    // if item already exists, kollar alla subträd för varje kallning, gör bara koll på nuvarande nod istället
 	{
+	  puts("LOL");
 	  return false;
 	}
       else
 	{
+	  puts("treeins4");
 	  if(lexi_comp(key, node_key))
 	    {
+	      if (tree->root->left == NULL)
+		{
+		  tree_node_t *left = calloc(1,sizeof(tree_node_t));
+		  tree->root->left = left;
+		}
 	      tree_insert_node(tree->root->left, key, elem);
 	    }
 	  else
 	    {
+	      if (tree->root->right == NULL)
+		{
+		  tree_node_t *right = calloc(1,sizeof(tree_node_t));
+		  tree->root->right = right;
+		}
 	      tree_insert_node(tree->root->right, key, elem);
 	    }
 	}
