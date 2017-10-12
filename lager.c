@@ -108,7 +108,6 @@ bool shelf_occupied_aux(char *input, tree_node_t *tree)
     {
       return false;
     }
-  puts("bp6");
   goods_t *item = (goods_t *) get_value_node(tree);
   list_t *lista = (item->list);
   shelf_entry_t *shelf_entry = (shelf_entry_t *) list_first(lista);
@@ -135,7 +134,6 @@ bool shelf_occupied(char *input, tree_root_t *tree)
     {
       return false;
     }
-  puts("bp5");
   
   goods_t *item = (goods_t *) get_value_root(tree);
   list_t *lista = (item->list);
@@ -150,7 +148,6 @@ bool shelf_occupied(char *input, tree_root_t *tree)
     }
   else
     {
-      puts("bp5.5");
       return shelf_occupied_aux(input, get_root(tree)); 
     }
 }
@@ -161,18 +158,12 @@ void add_goods(tree_root_t *tree)
   goods_t *item = calloc(1, sizeof(goods_t));
   char *name = ask_question_string("Välj namn för varan\n");
   item->name = name;
-
-  puts("bp1");
   
   char *desc = ask_question_string("Välj beskrivning för din vara\n");
   item->desc = desc;
 
-  puts("bp2");
-
   int price = ask_question_int("Sätt ett pris\n");
   item->price = price;
-
-  puts("bp3");
 
   list_t *list = list_new();
   item->list = list;
@@ -181,26 +172,17 @@ void add_goods(tree_root_t *tree)
   shelf_entry_t *shelf_elem = calloc(1, sizeof(shelf_entry_t));
   char *shelf;
 
-  puts("bp4");
-
   do
     {
       shelf = ask_question_string("Vilken hyllplats? T.ex. A25\n");
       occupied = shelf_occupied(shelf, tree);
     }while(occupied);
-  // Seg fault i do-while-loopen när man lägger till en andra vara.
   
-  puts("bp4.5");
-
   shelf_elem->shelf = shelf;
   list_prepend(list, shelf_elem);
-  
-  puts("bp5");
 
   int amount = ask_question_int("Hur många exemplar av varan vill du lägga till?\n");
   shelf_elem->amount = amount;
-
-  puts("bp6");
 
   if(tree_insert(tree, name, item))       
     {
@@ -283,8 +265,7 @@ void list_menu(goods_t *item, tree_root_t *tree, action_t undo)
   puts("[A]vbryt\n");
   
   char *c = ask_question_string("");
-  char temp = c[0];
-  c[0] = toupper(temp);
+  c[0] = toupper(c[0]);
 
   if(!strcmp(c,"N"))
     {
@@ -350,7 +331,13 @@ void edit_goods(tree_root_t *tree, action_t undo)
 
   undo.type=3;
   undo.merch = item;
-  // sätt undo.copy till nuvarande item
+  
+  goods_t copy = undo.copy;
+  copy.name = item_key;
+  copy.desc = item->desc;
+  copy.price = item->price;
+  // kopiera hela listan.
+  
   list_menu(item, tree, undo);
 
   return;
@@ -361,8 +348,7 @@ void menu_choice(tree_root_t *tree, action_t undo)
 {
   print_menu();
   char *c = ask_question_string("Vad vill du göra idag?\n");
-  char temp = c[0];
-  c[0] = toupper(temp);
+  c[0] = toupper(c[0]);
   
   if (!strcmp(c,"L"))
     {
@@ -392,6 +378,7 @@ void menu_choice(tree_root_t *tree, action_t undo)
       
       if(undo.type==3) // TODO: undo edit
         {
+          
           
         }
     }

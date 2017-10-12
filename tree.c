@@ -173,27 +173,23 @@ int tree_depth(tree_root_t *tree) // UNTESTED
 
 bool tree_has_key_node(tree_node_t *tree, K key)
 {
-  puts("treehaskeynode1");
   if (tree==NULL)
     {
       return false;
     }
   if (!tree->value)
     {
-      puts("treehaskeynode2");
       return false;
     }
-  puts("treehaskeynode3");
+
   char *name = tree->key;
-  puts("treehaskeynode4");
+
   if (!strcmp(name, key))
     {
-      puts("treehaskeynode5");
       return true;
     }
-  puts("treehaskeynode6");
+  
   return tree_has_key_node(tree->left, key) || tree_has_key_node(tree->right, key);
-  puts("treehaskeynode7");
 }
 /// Checks whether a key is used in a tree
 ///
@@ -331,25 +327,19 @@ bool tree_insert(tree_root_t *tree, K key, T elem) // UNTESTED
 {
   if (tree->root->value == NULL)                     // if tree is empty
     {
-      puts("treeins1");
       tree->root->key = key;
       tree->root->value = elem;                      // set tree's item to elem 
-      puts("treeins2");
     }
   
   else 
     {
-      puts("treeins3");
       char *node_key = tree->root->key;
-      puts("treeins4");
       if (tree_has_key(tree,key))    // if item already exists, kollar alla subträd för varje kallning, gör bara koll på nuvarande nod istället
 	{
-	  puts("LOL");
 	  return false;
 	}
       else
 	{
-	  puts("treeins4");
 	  if(lexi_comp(key, node_key))
 	    {
 	      if (tree->root->left == NULL)
@@ -376,10 +366,11 @@ bool tree_insert(tree_root_t *tree, K key, T elem) // UNTESTED
 
 T tree_get_node(tree_node_t *tree, K key)
 {
-  if (tree==NULL)
+  if (!tree->value)
     {
       return tree->value;
     }
+  
   char *node_key = tree->key;
   if (strcmp(node_key, key) == 0)
     {
@@ -528,21 +519,3 @@ void tree_apply(tree_root_t *tree, enum tree_order order, tree_action2 fun, void
 
 
 
-/*
-int main()
-{
-  int arr1[3]={1,2,3};
-  int arr2[2]={4,5};
-  int *arr3 = array_concat(arr1, 3, arr2, 2, sizeof(int));
-  for (int i=0; i<5; i++)
-    {
-      printf("%d\n",arr3[i]);
-    }
-
-  tree_t tree1 = {.left=NULL, .right=NULL, .item = 'A'}
-  tree_t tree2 = {.left=NULL, .right=NULL, .item = 'C'}
-  tree_t tree3 = {.left=tree1, .left=tree2, .item = 'B'}
-    
-  return 0;
-}
-*/
