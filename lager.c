@@ -272,7 +272,7 @@ void undo_action()
 }
 
 
-void list_menu(goods_t *item, tree_root_t *tree) 
+void list_menu(goods_t *item, tree_root_t *tree, action_t undo) 
 {
  top:
   puts("Ändra [N]amn");
@@ -337,7 +337,7 @@ void list_menu(goods_t *item, tree_root_t *tree)
     }
 }
 
-void edit_goods(tree_root_t *tree)
+void edit_goods(tree_root_t *tree, action_t undo)
 {
   char *item_key = ask_question_string("Vilken vara vill du ändra?\n");    
   goods_t *item = tree_get(tree, item_key);
@@ -348,12 +348,16 @@ void edit_goods(tree_root_t *tree)
     }
   print_goods(item);
 
-  list_menu(item, tree);
+  undo.type=3;
+  undo.merch = item;
+  // sätt undo.copy till nuvarande item
+  list_menu(item, tree, undo);
+
   return;
 }
 
 
-void menu_choice(tree_root_t *tree) 
+void menu_choice(tree_root_t *tree, action_t undo) 
 {
   print_menu();
   char *c = ask_question_string("Vad vill du göra idag?\n");
@@ -374,14 +378,22 @@ void menu_choice(tree_root_t *tree)
 
   if (!strcmp(c,"R"))
     {
-      edit_goods(tree);
+      edit_goods(tree, undo);
       return;
     }
 
   if (!strcmp(c,"G"))
     {
-      undo_action();
-      return;
+      if(undo.type==0)
+        {
+          puts("Det finns ingenting att ångra");
+          return;
+        }
+      
+      if(undo.type==3) // TODO: undo edit
+        {
+          
+        }
     }
 
   if (!strcmp(c,"H"))
@@ -402,12 +414,13 @@ void menu_choice(tree_root_t *tree)
 
 int main()
 {
+  action_t undo = {.type = 0, .merch = calloc(1, sizeof(goods_t))}; //.copy = ?
   tree_root_t *tree = tree_new();
-  puts("Välkommen till lagerhantering 1.0");
+  puts("\nVälkommen till lagerhantering 1.0");
   puts("=================================");
   while(true)
     {
-      menu_choice(tree);
+      menu_choice(tree, undo);
     }
   
   return 0;
