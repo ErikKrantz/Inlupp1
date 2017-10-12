@@ -128,7 +128,7 @@ bool shelf_occupied(char *input, tree_root_t *tree)
     }
   puts("bp5");
   
-  // Seg fault because you can't just get_value_root, it has to be the right element of the right value.
+  // Seg fault probably cus second insert goes wrong so "shelf" isn't a char that can be used with strcmp.
   shelf_entry_t *shelf_entry  = (shelf_entry_t *) get_element((link_t *)get_value_root(tree));
 
   char *shelf = shelf_entry->shelf;
@@ -264,54 +264,67 @@ void undo_action()
 
 void list_menu(goods_t *item, tree_root_t *tree) 
 {
+ top:
   puts("Ändra [N]amn");
   puts("Ändra [B]eskrivning");
   puts("Ändra [P]ris");
+  puts("Ändra [M]ängd");
   puts("[L]ista varukatalog");
   puts("[A]vbryt\n");
   
   char *c = ask_question_string("");
   char temp = c[0];
   c[0] = toupper(temp);
-  
-  if (!strcmp(c, "L"))
-    {
-      list_goods(tree);
-      list_menu(item, tree);
-    }
-  
-  if (!strcmp(c,"A"))
-    {
-      return;
-    }
-  
+
   if(!strcmp(c,"N"))
     {
       char *new_name = ask_question_string("Välj nytt namn för varan\n");
       *(get_key_root(tree, item->name)) = new_name;
       item->name = new_name;
       print_goods(item);
-      list_menu(item, tree);
+      goto top;
     }
   
-  if(strcmp(c,"B")==0)
+  if(!strcmp(c,"B"))
     {
       char *new_desc = ask_question_string("Välj ny beskrivning för varan\n");
       item->desc = new_desc;
       print_goods(item);
-      list_menu(item, tree);
+      goto top;
     }
   
-  if(strcmp(c,"P")==0)
+  if(!strcmp(c,"P"))
     {
       int new_price = ask_question_int("Välj nytt pris för varan\n");
       item->price = new_price;
       print_goods(item);
-      list_menu(item, tree);
+      goto top;
     }
-    
-  puts("Fel inmatning, testa igen");
-  list_menu(item, tree);
+
+  if(!strcmp(c, "M"))
+    {
+      int new_amount = ask_question_int("Välj ett nytt varuantal\n");      
+      shelf_entry_t *shelf_entry = (shelf_entry_t *) get_element(get_first(item->list));
+      shelf_entry->amount = new_amount;
+      print_goods(item);
+      goto top;
+    }
+            
+  if (!strcmp(c, "L"))
+    {
+      list_goods(tree);
+      goto top;
+    }
+  
+  if (!strcmp(c,"A"))
+    {
+      return;
+    }
+  else
+    {
+      puts("Fel inmatning, testa igen");
+      goto top;
+    }
 }
 
 void edit_goods(tree_root_t *tree)
