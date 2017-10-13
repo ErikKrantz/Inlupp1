@@ -255,7 +255,7 @@ goods_t copy_item(goods_t *item)
   copy.name = item->name;
   copy.desc = item->desc;
   copy.price = item->price;
-  //kopiera hela listan. måste antagligen gå in i varje link...
+  copy.list = item->list;   // måste antagligen gå in i listans links och kopiera elementen.
   return copy;
 }
 
