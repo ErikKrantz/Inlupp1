@@ -249,8 +249,14 @@ void display_goods(tree_root_t *tree)
   print_goods(tree_get(tree,item));
 }
 
-void undo_action()
+goods_t copy_item(goods_t *item)
 {
+  goods_t copy;
+  copy.name = item->name;
+  copy.desc = item->desc;
+  copy.price = item->price;
+  //kopiera hela listan. måste antagligen gå in i varje link...
+  return copy;
 }
 
 
@@ -330,16 +336,10 @@ void edit_goods(tree_root_t *tree, action_t undo)
   print_goods(item);
 
   undo.type=3;
-  undo.merch = item;
-  
-  goods_t copy = undo.copy;
-  copy.name = item_key;
-  copy.desc = item->desc;
-  copy.price = item->price;
-  // kopiera hela listan.
+  undo.merch = item; 
+  undo.copy = copy_item(item);
   
   list_menu(item, tree, undo);
-
   return;
 }
 
@@ -376,10 +376,9 @@ void menu_choice(tree_root_t *tree, action_t undo)
           return;
         }
       
-      if(undo.type==3) // TODO: undo edit
+      if(undo.type==3) // Free:a gamla itemet?
         {
-          
-          
+          undo.merch = &undo.copy;
         }
     }
 
@@ -401,7 +400,7 @@ void menu_choice(tree_root_t *tree, action_t undo)
 
 int main()
 {
-  action_t undo = {.type = 0, .merch = calloc(1, sizeof(goods_t))}; //.copy = ?
+  action_t undo = {.type = 0, .merch = NULL};
   tree_root_t *tree = tree_new();
   puts("\nVälkommen till lagerhantering 1.0");
   puts("=================================");
