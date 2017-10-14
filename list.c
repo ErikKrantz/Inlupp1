@@ -47,10 +47,15 @@ link_t *copy_link(link_t link)
 list_t *copy_list(list_t *list, copy_function copy)
 {
   list_t *list_copy = list_new();
+  if (list_length(list)==0)
+    {
+      L *e = list_get(list, 0);
+      list_append(list_copy, copy(e));
+    }
   for(int i=0; i<list_length(list); i++)
     {
       L *e = list_get(list, i);
-      list_append(list_copy, copy(*e));
+      list_append(list_copy, copy(e));
     }
   return list_copy;
 }
