@@ -30,6 +30,14 @@ struct action
   goods_t copy;
 };
 
+shelf_entry_t *copy_shelf(shelf_entry_t *shelf)
+{
+  shelf_entry_t *shelf_copy = calloc(1, sizeof(shelf_entry_t));
+  shelf_copy->shelf = shelf->shelf;
+  shelf_copy->amount = shelf->amount;
+  return shelf_copy;
+}
+
 void print_menu()
 {
   char *menu_choices = "[L]ägga till en vara\n[T]a bort en vara\n[R]edigera en vara\nÅn[g]ra senaste ändringen\nLista [h]ela varukatalogen\n[A]vsluta\n";
@@ -141,7 +149,6 @@ bool shelf_occupied(char *input, tree_root_t *tree)
 
   char *shelf = shelf_entry->shelf;
   
-  // mellan denna kommentar och bp5.5 -> seg fault när man lägger till en andra vara.
   if(!strcmp(input, shelf)) // det är här man får seg fault, antagligen shelf som är NULL lr nåt sånt.
     {
       return true;
@@ -211,6 +218,7 @@ void list_goods_aux(tree_root_t *tree, int index, int tree_siz)
       arr[i] = (char *) tree_keys(tree)[index];
       printf("%d. %s\n", index+1, arr[i]);
     }
+
   
   char *c = ask_question_string("Vill du lista fler varor? [Y]?\n");
   if (strcmp(c,"Y")==0 || strcmp(c,"y")==0)
@@ -231,14 +239,16 @@ void list_goods(tree_root_t *tree)
       
       if(i+1==tree_siz)
         {
+          puts("");
           break;
         }
     }
-  char *c = ask_question_string("Vill du lista fler varor? [Y]?\n");
+  /*char *c = ask_question_string("Vill du lista fler varor? [Y]?\n");
   if (strcmp(c,"Y")==0 || strcmp(c,"y")==0)
     {
       list_goods_aux(tree, i, tree_siz);
     }
+  */
 }
 
 
@@ -249,18 +259,19 @@ void display_goods(tree_root_t *tree)
   print_goods(tree_get(tree,item));
 }
 
+//TODO: ändra undo till pekare, 
 goods_t copy_item(goods_t *item)
 {
   goods_t copy;
   copy.name = item->name;
   copy.desc = item->desc;
   copy.price = item->price;
-  copy.list = item->list;   // måste antagligen gå in i listans links och kopiera elementen.
+  copy.list = copy_list(item->list, (shelf_entry_t *) copy_shelf);   // måste antagligen gå in i listans links och kopiera elementen.
   return copy;
 }
 
 
-void list_menu(goods_t *item, tree_root_t *tree, action_t undo) 
+void list_menu(goods_t *item, tree_root_t *tree) 
 {
  top:
   puts("Ändra [N]amn");
@@ -324,7 +335,7 @@ void list_menu(goods_t *item, tree_root_t *tree, action_t undo)
     }
 }
 
-void edit_goods(tree_root_t *tree, action_t undo)
+void edit_goods(tree_root_t *tree, action_t *undo)
 {
   char *item_key = ask_question_string("Vilken vara vill du ändra?\n");    
   goods_t *item = tree_get(tree, item_key);
@@ -335,17 +346,22 @@ void edit_goods(tree_root_t *tree, action_t undo)
     }
   print_goods(item);
 
-  undo.type=3;
-  undo.merch = item; 
-  undo.copy = copy_item(item);
+  undo->type=3;
+  undo->merch = item;
+  if(undo->copy.list)
+    {
+      free(undo->copy.list);
+    }
+  undo->copy = copy_item(item);
   
-  list_menu(item, tree, undo);
+  list_menu(item, tree);
   return;
 }
 
 
-void menu_choice(tree_root_t *tree, action_t undo) 
+void menu_choice(tree_root_t *tree, action_t *undo) 
 {
+  
   print_menu();
   char *c = ask_question_string("Vad vill du göra idag?\n");
   c[0] = toupper(c[0]);
@@ -370,15 +386,17 @@ void menu_choice(tree_root_t *tree, action_t undo)
 
   if (!strcmp(c,"G"))
     {
-      if(undo.type==0)
+      
+      if(undo->type==0)
         {
           puts("Det finns ingenting att ångra");
           return;
         }
       
-      if(undo.type==3) // Free:a gamla itemet?
+      if(undo->type==3)
         {
-          undo.merch = &undo.copy;
+          free(undo->merch->list);
+          *undo->merch = undo->copy;
         }
     }
 
@@ -406,7 +424,7 @@ int main()
   puts("=================================");
   while(true)
     {
-      menu_choice(tree, undo);
+      menu_choice(tree, &undo);
     }
   
   return 0;
