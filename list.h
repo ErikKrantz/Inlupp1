@@ -13,6 +13,11 @@ typedef struct link link_t;
 /// in your program.
 typedef void *L;
 
+
+
+typedef L (copy_function) (L);  
+
+
 /// This function is used in list_delete() to allow the lists which are
 /// the sole owners of their data to free the data on delete.
 typedef void(*list_action)(L elem);
@@ -39,7 +44,7 @@ link_t *get_last(list_t *list);
 
 link_t *get_first(list_t *list);
 
-
+list_t *copy_list(list_t *list, copy_function copy);                           
 /// Creates a new list
 ///
 /// \returns: empty list
