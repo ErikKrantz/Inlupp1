@@ -96,18 +96,35 @@ void print_goods(goods_t *item)
 
 int tally_amount(list_t *list)
 {
-  link_t *cursor = get_first(list); 
+  puts("1");
+  link_t *cursor = get_first(list);
+  puts("2");
+  char *test = (char *) list;
+  printf("%s = list \n", test);
+  if (cursor == NULL)
+    {
+      puts("Cursor är null");
+    }
   int length = list_length(list);
+  printf("%d = length\n", length);
   shelf_entry_t *element = (shelf_entry_t*)  get_element(cursor);
+  puts("3");
   int amount = element->amount;
+  puts("4");
   for (int i=0; i<length-1; i++)
     {
+      puts("4.1");
       cursor = get_next(cursor);
+      puts("4.2");
       shelf_entry_t *element = (shelf_entry_t*) get_element(cursor);
+      puts("4.3");
       int amount2 = element->amount;
+      puts("4.4");
       amount += amount2;
+      puts("4.5");
     }
   return amount;
+  puts("5");
 }
 
 bool shelf_occupied_aux(char *input, tree_node_t *tree)
@@ -266,7 +283,7 @@ goods_t copy_item(goods_t *item)
   copy.name = item->name;
   copy.desc = item->desc;
   copy.price = item->price;
-  copy.list = copy_list(item->list, (shelf_entry_t *) copy_shelf);   // måste antagligen gå in i listans links och kopiera elementen.
+  copy.list = copy_list(item->list, (void *) copy_shelf);   // måste antagligen gå in i listans links och kopiera elementen.
   return copy;
 }
 
@@ -396,7 +413,11 @@ void menu_choice(tree_root_t *tree, action_t *undo)
       if(undo->type==3)
         {
           free(undo->merch->list);
+	  char *copy_name = undo->copy.name;
+	  char *current_name = undo->merch->name;
+          *(get_key_root(tree, current_name)) = copy_name;
           *undo->merch = undo->copy;
+	  
         }
     }
 
@@ -418,13 +439,15 @@ void menu_choice(tree_root_t *tree, action_t *undo)
 
 int main()
 {
-  action_t undo = {.type = 0, .merch = NULL};
+  action_t *undo = calloc(1,sizeof(action_t));
+  undo->merch = NULL;
+  undo->type = 0;
   tree_root_t *tree = tree_new();
   puts("\nVälkommen till lagerhantering 1.0");
   puts("=================================");
   while(true)
     {
-      menu_choice(tree, &undo);
+      menu_choice(tree, undo);
     }
   
   return 0;
