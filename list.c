@@ -37,6 +37,24 @@ link_t *get_first(list_t *list)
   return list->first;
 }
 
+/*
+link_t *copy_link(link_t link)
+{
+  link_t *copy_link;  
+}
+*/
+
+list_t *copy_list(list_t *list, copy_function copy)
+{
+  list_t *list_copy = list_new();
+  for(int i=0; i<list_length(list); i++)
+    {
+      L *e = list_get(list, i);
+      list_append(list_copy, copy(*e));
+    }
+  return list_copy;
+}
+
 
 /*
 int get_amount(goods_t *item)
