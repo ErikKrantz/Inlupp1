@@ -96,35 +96,19 @@ void print_goods(goods_t *item)
 
 int tally_amount(list_t *list)
 {
-  puts("1");
   link_t *cursor = get_first(list);
-  puts("2");
   char *test = (char *) list;
-  printf("%s = list \n", test);
-  if (cursor == NULL)
-    {
-      puts("Cursor är null");
-    }
   int length = list_length(list);
-  printf("%d = length\n", length);
   shelf_entry_t *element = (shelf_entry_t*)  get_element(cursor);
-  puts("3");
   int amount = element->amount;
-  puts("4");
   for (int i=0; i<length-1; i++)
     {
-      puts("4.1");
       cursor = get_next(cursor);
-      puts("4.2");
       shelf_entry_t *element = (shelf_entry_t*) get_element(cursor);
-      puts("4.3");
       int amount2 = element->amount;
-      puts("4.4");
       amount += amount2;
-      puts("4.5");
     }
   return amount;
-  puts("5");
 }
 
 bool shelf_occupied_aux(char *input, tree_node_t *tree)
@@ -365,12 +349,13 @@ void edit_goods(tree_root_t *tree, action_t *undo)
 
   undo->type=3;
   undo->merch = item;
+  /*
   if(undo->copy.list)
     {
-      free(undo->copy.list);
+      free(undo->copy.list);      // freear upp item->list när man redigerar en redigerad vara
     }
+  */
   undo->copy = copy_item(item);
-  
   list_menu(item, tree);
   return;
 }
